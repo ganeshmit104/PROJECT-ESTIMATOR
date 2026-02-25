@@ -148,7 +148,6 @@ const resourceSummary = {};
 
 
 enabledPhases.forEach(phase => {
-  const phaseHours = phase.weeks * hoursPerWeek;
   let phaseCost = 0, phaseOnsiteCost = 0, phaseOffshoreCost = 0;
   const phaseResources = [];
 
