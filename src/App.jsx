@@ -110,30 +110,30 @@ prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
 
 const toggleCategoryResources = (category, enable) => {
 const ids = allResourceTypes.filter(r => r.category === category).map(r => r.id);
-if (enable) setEnabledResources(prev => [. . .new Set([. . .prev, . . .ids])]);
+if (enable) setEnabledResources(prev => [...new Set([...prev, ...ids])]);
 else setEnabledResources(prev => prev.filter(id => !ids.includes(id)));
 };
 
 const updatePhase = (id, field, value) => {
 setPhases(phases.map(p =>
-p.id === id ? { . . .p, [field]: field === 'weeks' ? Number(value) : value } : p
+p.id === id ? { ...p, [field]: field === 'weeks' ? Number(value) : value } : p
 ));
 };
 
 const updateAllocation = (phaseId, resourceId, location, value) => {
 setAllocations(prev => ({
-. . .prev,
+...prev,
 [phaseId]: {
-. . .prev[phaseId],
-[resourceId]: { . . .prev[phaseId]?.[resourceId], [location]: Number(value) || 0 }
+...prev[phaseId],
+[resourceId]: { ...prev[phaseId]?.[resourceId], [location]: Number(value) || 0 }
 }
 }));
 };
 
 const updateRate = (location, resourceId, value) => {
 setRates(prev => ({
-. . .prev,
-[location]: { . . .prev[location], [resourceId]: Number(value) || 0 }
+...prev,
+[location]: { ...prev[location], [resourceId]: Number(value) || 0 }
 }));
 };
 
@@ -215,7 +215,7 @@ id: Date.now(), name: projectName, clientName,
 savedAt: new Date().toISOString(),
 data: { projectName, clientName, phases, rates, hoursPerWeek, currency, allocations, enabledResources }
 };
-const updated = [. . .savedProjects.filter(p => p.name !== projectName), project];
+const updated = [...savedProjects.filter(p => p.name !== projectName), project];
 setSavedProjects(updated);
 localStorage.setItem('dw_estimator_projects', JSON.stringify(updated));
 setShowSaveModal(false);
@@ -247,7 +247,7 @@ const sym = currencySymbols[currency];
 let csv = [
 ['Data Warehouse Project Estimate'],
 ['Project Name', estimate.projectName],
-. . .(estimate.clientName ? [['Client', estimate.clientName]] : []),
+...(estimate.clientName ? [['Client', estimate.clientName]] : []),
 ['Generated', new Date(estimate.generatedAt).toLocaleString()],
 [],
 ['SUMMARY'],
@@ -258,7 +258,7 @@ let csv = [
 [],
 ['PHASE BREAKDOWN'],
 ['Phase', 'Weeks', 'Onsite Cost', 'Offshore Cost', 'Total Cost'],
-. . .estimate.phaseBreakdown.map(p => [
+...estimate.phaseBreakdown.map(p => [
 p.name, p.weeks,
 `${sym}${p.onsiteCost.toLocaleString()}`,
 `${sym}${p.offshoreCost.toLocaleString()}`,
@@ -267,7 +267,7 @@ p.name, p.weeks,
 [],
 ['RESOURCE BREAKDOWN'],
 ['Resource', 'Category', 'Onsite Hours', 'Offshore Hours', 'Onsite Cost', 'Offshore Cost', 'Total Cost'],
-. . .estimate.resourceSummary.map(r => [
+...estimate.resourceSummary.map(r => [
 r.name, r.category, r.onsiteHours, r.offshoreHours,
 `${sym}${r.onsiteCost.toLocaleString()}`,
 `${sym}${r.offshoreCost.toLocaleString()}`,
@@ -330,8 +330,8 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
         <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Data Warehouse & BI Project Estimation Tool</p>
       </div>
       <div style={{ display: 'flex', gap: '10px' }}>
-        <button onClick={() => setShowLoadModal(true)} style={{ . . .btn, background: 'rgba(255,255,255,0.1)', color: '#fff' }}>📂 Load</button>
-        <button onClick={() => setShowSaveModal(true)} style={{ . . .btn, background: 'rgba(34,197,94,0.2)', color: '#22c55e' }}>💾 Save</button>
+        <button onClick={() => setShowLoadModal(true)} style={{ ...btn, background: 'rgba(255,255,255,0.1)', color: '#fff' }}>📂 Load</button>
+        <button onClick={() => setShowSaveModal(true)} style={{ ...btn, background: 'rgba(34,197,94,0.2)', color: '#22c55e' }}>💾 Save</button>
       </div>
     </div>
 
@@ -358,16 +358,16 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
               ].map(({ label, val, set, ph }) => (
                 <div key={label}>
                   <label style={{ color: '#94a3b8', fontSize: '0.85rem', display: 'block', marginBottom: '6px' }}>{label}</label>
-                  <input type="text" value={val} onChange={e => set(e.target.value)} placeholder={ph} style={{ . . .inp, width: '100%' }} />
+                  <input type="text" value={val} onChange={e => set(e.target.value)} placeholder={ph} style={{ ...inp, width: '100%' }} />
                 </div>
               ))}
               <div>
                 <label style={{ color: '#94a3b8', fontSize: '0.85rem', display: 'block', marginBottom: '6px' }}>Hours/Week</label>
-                <input type="number" value={hoursPerWeek} onChange={e => setHoursPerWeek(Number(e.target.value))} style={{ . . .inp, width: '100%' }} />
+                <input type="number" value={hoursPerWeek} onChange={e => setHoursPerWeek(Number(e.target.value))} style={{ ...inp, width: '100%' }} />
               </div>
               <div>
                 <label style={{ color: '#94a3b8', fontSize: '0.85rem', display: 'block', marginBottom: '6px' }}>Currency</label>
-                <select value={currency} onChange={e => setCurrency(e.target.value)} style={{ . . .inp, width: '100%', cursor: 'pointer' }}>
+                <select value={currency} onChange={e => setCurrency(e.target.value)} style={{ ...inp, width: '100%', cursor: 'pointer' }}>
                   {Object.entries(currencySymbols).map(([code, sym]) => (
                     <option key={code} value={code} style={{ background: '#1e293b' }}>{code} ({sym})</option>
                   ))}
@@ -393,7 +393,7 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
                   </label>
                   {phase.enabled && (
                     <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <input type="number" value={phase.weeks} onChange={e => updatePhase(phase.id, 'weeks', e.target.value)} min="1" style={{ . . .inp, width: '60px', textAlign: 'center' }} />
+                      <input type="number" value={phase.weeks} onChange={e => updatePhase(phase.id, 'weeks', e.target.value)} min="1" style={{ ...inp, width: '60px', textAlign: 'center' }} />
                       <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>weeks</span>
                     </div>
                   )}
@@ -415,9 +415,9 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
                 </p>
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
-                <button onClick={() => setEnabledResources(allResourceTypes.map(r => r.id))} style={{ . . .btn, background: 'rgba(34,197,94,0.2)', color: '#22c55e', padding: '6px 12px', fontSize: '0.8rem' }}>All</button>
-                <button onClick={() => setEnabledResources([])} style={{ . . .btn, background: 'rgba(239,68,68,0.2)', color: '#ef4444', padding: '6px 12px', fontSize: '0.8rem' }}>Clear</button>
-                <button onClick={() => setShowResourceSelector(!showResourceSelector)} style={{ . . .btn, background: 'rgba(255,255,255,0.1)', color: '#94a3b8', padding: '6px 12px', fontSize: '0.8rem' }}>
+                <button onClick={() => setEnabledResources(allResourceTypes.map(r => r.id))} style={{ ...btn, background: 'rgba(34,197,94,0.2)', color: '#22c55e', padding: '6px 12px', fontSize: '0.8rem' }}>All</button>
+                <button onClick={() => setEnabledResources([])} style={{ ...btn, background: 'rgba(239,68,68,0.2)', color: '#ef4444', padding: '6px 12px', fontSize: '0.8rem' }}>Clear</button>
+                <button onClick={() => setShowResourceSelector(!showResourceSelector)} style={{ ...btn, background: 'rgba(255,255,255,0.1)', color: '#94a3b8', padding: '6px 12px', fontSize: '0.8rem' }}>
                   {showResourceSelector ? '▲ Collapse' : '▼ Expand'}
                 </button>
               </div>
@@ -465,7 +465,7 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
           <div style={sec}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <h3 style={{ color: '#e2e8f0', fontSize: '1rem', margin: 0 }}>💰 Hourly Rates</h3>
-              <button onClick={() => setShowRates(!showRates)} style={{ . . .btn, background: 'rgba(255,255,255,0.1)', color: '#94a3b8', padding: '8px 12px' }}>
+              <button onClick={() => setShowRates(!showRates)} style={{ ...btn, background: 'rgba(255,255,255,0.1)', color: '#94a3b8', padding: '8px 12px' }}>
                 {showRates ? '▲ Hide' : '▼ Show'} Rate Editor
               </button>
             </div>
@@ -486,7 +486,7 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
                         <td style={{ color: categoryColors[r.category], padding: '8px', fontSize: '0.8rem' }}>{r.category}</td>
                         {['onsite', 'offshore'].map(loc => (
                           <td key={loc} style={{ textAlign: 'center', padding: '6px' }}>
-                            <input type="number" value={rates[loc][r.id]} onChange={e => updateRate(loc, r.id, e.target.value)} style={{ . . .inp, width: '80px', textAlign: 'center' }} />
+                            <input type="number" value={rates[loc][r.id]} onChange={e => updateRate(loc, r.id, e.target.value)} style={{ ...inp, width: '80px', textAlign: 'center' }} />
                           </td>
                         ))}
                       </tr>
@@ -498,7 +498,7 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
           </div>
 
           <button onClick={() => setActiveTab('allocation')} disabled={enabledResources.length === 0}
-            style={{ . . .btn, background: enabledResources.length === 0 ? '#374151' : '#3b82f6', color: '#fff', width: '100%', padding: '14px', cursor: enabledResources.length === 0 ? 'not-allowed' : 'pointer' }}>
+            style={{ ...btn, background: enabledResources.length === 0 ? '#374151' : '#3b82f6', color: '#fff', width: '100%', padding: '14px', cursor: enabledResources.length === 0 ? 'not-allowed' : 'pointer' }}>
             {enabledResources.length === 0 ? 'Please select at least one role' : 'Next: Resource Allocation →'}
           </button>
         </div>
@@ -548,10 +548,10 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
                             <td style={{ color: '#cbd5e1', padding: '6px 8px', fontSize: '0.85rem', position: 'sticky', left: 0, background: '#1a2536', zIndex: 1 }}>{resource.name}</td>
                             {phases.filter(p => p.enabled).flatMap(phase => [
                               <td key={`${phase.id}-${resource.id}-on`} style={{ padding: '4px', textAlign: 'center' }}>
-                                <input type="number" min="0" step="0.5" value={allocations[phase.id]?.[resource.id]?.onsite || ''} onChange={e => updateAllocation(phase.id, resource.id, 'onsite', e.target.value)} placeholder="0" style={{ . . .inp, width: '50px', padding: '6px', textAlign: 'center' }} />
+                                <input type="number" min="0" step="0.5" value={allocations[phase.id]?.[resource.id]?.onsite || ''} onChange={e => updateAllocation(phase.id, resource.id, 'onsite', e.target.value)} placeholder="0" style={{ ...inp, width: '50px', padding: '6px', textAlign: 'center' }} />
                               </td>,
                               <td key={`${phase.id}-${resource.id}-off`} style={{ padding: '4px', textAlign: 'center' }}>
-                                <input type="number" min="0" step="0.5" value={allocations[phase.id]?.[resource.id]?.offshore || ''} onChange={e => updateAllocation(phase.id, resource.id, 'offshore', e.target.value)} placeholder="0" style={{ . . .inp, width: '50px', padding: '6px', textAlign: 'center' }} />
+                                <input type="number" min="0" step="0.5" value={allocations[phase.id]?.[resource.id]?.offshore || ''} onChange={e => updateAllocation(phase.id, resource.id, 'offshore', e.target.value)} placeholder="0" style={{ ...inp, width: '50px', padding: '6px', textAlign: 'center' }} />
                               </td>
                             ])}
                           </tr>
@@ -568,8 +568,8 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
             </div>
           </div>
           <div style={{ display: 'flex', gap: '12px' }}>
-            <button onClick={() => setActiveTab('config')} style={{ . . .btn, background: 'rgba(255,255,255,0.1)', color: '#fff', flex: 1, padding: '14px' }}>← Back</button>
-            <button onClick={calculateEstimate} style={{ . . .btn, background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', color: '#fff', flex: 2, padding: '14px' }}>📊 Calculate Estimate</button>
+            <button onClick={() => setActiveTab('config')} style={{ ...btn, background: 'rgba(255,255,255,0.1)', color: '#fff', flex: 1, padding: '14px' }}>← Back</button>
+            <button onClick={calculateEstimate} style={{ ...btn, background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', color: '#fff', flex: 2, padding: '14px' }}>📊 Calculate Estimate</button>
           </div>
         </div>
       )}
@@ -578,8 +578,8 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
       {activeTab === 'results' && estimate && (
         <div className="print-area">
           <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }} className="no-print">
-            <button onClick={exportToCSV} style={{ . . .btn, background: 'rgba(34,197,94,0.2)', color: '#22c55e' }}>📥 Export CSV</button>
-            <button onClick={() => window.print()} style={{ . . .btn, background: 'rgba(239,68,68,0.2)', color: '#ef4444' }}>📄 Print / PDF</button>
+            <button onClick={exportToCSV} style={{ ...btn, background: 'rgba(34,197,94,0.2)', color: '#22c55e' }}>📥 Export CSV</button>
+            <button onClick={() => window.print()} style={{ ...btn, background: 'rgba(239,68,68,0.2)', color: '#ef4444' }}>📄 Print / PDF</button>
           </div>
 
           {/* Summary Cards */}
@@ -675,8 +675,8 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
           <p style={{ color: '#f59e0b', fontSize: '0.85rem', marginBottom: '16px' }}>⚠️ This will overwrite the existing project.</p>
         )}
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button onClick={() => setShowSaveModal(false)} style={{ . . .btn, background: 'rgba(255,255,255,0.1)', color: '#fff', flex: 1 }}>Cancel</button>
-          <button onClick={saveProject} style={{ . . .btn, background: '#22c55e', color: '#fff', flex: 1 }}>Save</button>
+          <button onClick={() => setShowSaveModal(false)} style={{ ...btn, background: 'rgba(255,255,255,0.1)', color: '#fff', flex: 1 }}>Cancel</button>
+          <button onClick={saveProject} style={{ ...btn, background: '#22c55e', color: '#fff', flex: 1 }}>Save</button>
         </div>
       </div>
     </div>
@@ -698,14 +698,14 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
                   <div style={{ color: '#64748b', fontSize: '0.8rem' }}>{project.clientName && `${project.clientName} • `}Saved {new Date(project.savedAt).toLocaleDateString()}</div>
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <button onClick={() => loadProject(project)} style={{ . . .btn, background: '#3b82f6', color: '#fff', padding: '6px 12px' }}>Load</button>
-                  <button onClick={() => deleteProject(project.id)} style={{ . . .btn, background: 'rgba(239,68,68,0.2)', color: '#ef4444', padding: '6px 12px' }}>🗑️</button>
+                  <button onClick={() => loadProject(project)} style={{ ...btn, background: '#3b82f6', color: '#fff', padding: '6px 12px' }}>Load</button>
+                  <button onClick={() => deleteProject(project.id)} style={{ ...btn, background: 'rgba(239,68,68,0.2)', color: '#ef4444', padding: '6px 12px' }}>🗑️</button>
                 </div>
               </div>
             ))}
           </div>
         )}
-        <button onClick={() => setShowLoadModal(false)} style={{ . . .btn, background: 'rgba(255,255,255,0.1)', color: '#fff', width: '100%', marginTop: '16px' }}>Close</button>
+        <button onClick={() => setShowLoadModal(false)} style={{ ...btn, background: 'rgba(255,255,255,0.1)', color: '#fff', width: '100%', marginTop: '16px' }}>Close</button>
       </div>
     </div>
   )}
