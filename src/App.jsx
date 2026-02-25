@@ -104,7 +104,7 @@ if (saved) setSavedProjects(JSON.parse(saved));
 
 const toggleResource = (id) => {
 setEnabledResources(prev =>
-prev.includes(id) ? prev.filter(x => x !== id) : [. . .prev, id]
+prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
 );
 };
 
