@@ -145,7 +145,7 @@ let totalOnsiteHours = 0, totalOffshoreHours = 0;
 const phaseBreakdown = [];
 const resourceSummary = {};
 
-```
+
 enabledPhases.forEach(phase => {
   const phaseHours = phase.weeks * hoursPerWeek;
   let phaseCost = 0, phaseOnsiteCost = 0, phaseOffshoreCost = 0;
@@ -205,7 +205,7 @@ setEstimate({
   generatedAt: new Date().toISOString()
 });
 setActiveTab('results');
-```
+
 
 };
 
@@ -319,7 +319,7 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
 }}>
 <style>{`@media print { body * { visibility: hidden; } .print-area, .print-area * { visibility: visible; } .print-area { position: absolute; left: 0; top: 0; width: 100%; } .no-print { display: none !important; } }`}</style>
 
-```
+
   <div style={{ maxWidth: '1500px', margin: '0 auto' }}>
     {/* Header */}
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }} className="no-print">
