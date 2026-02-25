@@ -282,6 +282,76 @@ link.download = `${projectName.replace(/\s+/g, '_')}_Estimate_${new Date().toISO
 link.click();
 };
 
+const exportAllocationCSV = () => {
+const enabledPhases = phases.filter(p => p.enabled);
+const sym = currencySymbols[currency];
+
+
+const rows = [
+  ['Resource Allocation Sheet'],
+  ['Project', projectName, ...(clientName ? ['Client', clientName] : [])],
+  ['Onsite Hrs/Week', onsiteHoursPerWeek, 'Offshore Hrs/Week', offshoreHoursPerWeek],
+  ['Generated', new Date().toLocaleString()],
+  [],
+  [
+    'Category', 'Resource',
+    ...enabledPhases.flatMap(p => [`${p.name} (${p.weeks}w) – Onsite FTE`, `${p.name} (${p.weeks}w) – Offshore FTE`]),
+    'Total Onsite Hrs', 'Total Offshore Hrs',
+    `Total Onsite Cost (${sym})`, `Total Offshore Cost (${sym})`, `Grand Total (${sym})`
+  ]
+];
+
+Object.entries(groupedResources).forEach(([cat, res]) => {
+  res.forEach(resource => {
+    let totalOnsiteHrs = 0, totalOffshoreHrs = 0;
+    let totalOnsiteCost = 0, totalOffshoreCost = 0;
+
+    const fteValues = enabledPhases.flatMap(phase => {
+      const alloc = allocations[phase.id]?.[resource.id] || { onsite: 0, offshore: 0 };
+      const oh = alloc.onsite * phase.weeks * onsiteHoursPerWeek;
+      const fh = alloc.offshore * phase.weeks * offshoreHoursPerWeek;
+      totalOnsiteHrs += oh;
+      totalOffshoreHrs += fh;
+      totalOnsiteCost += oh * rates.onsite[resource.id];
+      totalOffshoreCost += fh * rates.offshore[resource.id];
+      return [alloc.onsite || '', alloc.offshore || ''];
+    });
+
+    rows.push([
+      cat, resource.name,
+      ...fteValues,
+      totalOnsiteHrs,
+      totalOffshoreHrs,
+      totalOnsiteCost.toFixed(0),
+      totalOffshoreCost.toFixed(0),
+      (totalOnsiteCost + totalOffshoreCost).toFixed(0)
+    ]);
+  });
+});
+
+// Totals row per phase
+const totalRow = ['', 'TOTAL'];
+enabledPhases.forEach(phase => {
+  let onTotal = 0, offTotal = 0;
+  resourceTypes.forEach(r => {
+    onTotal += allocations[phase.id]?.[r.id]?.onsite || 0;
+    offTotal += allocations[phase.id]?.[r.id]?.offshore || 0;
+  });
+  totalRow.push(onTotal, offTotal);
+});
+rows.push([]);
+rows.push(totalRow);
+
+const csvContent = rows.map(row => row.map(c => `"${c}"`).join(',')).join('\n');
+const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+const link = document.createElement('a');
+link.href = URL.createObjectURL(blob);
+link.download = `${projectName.replace(/\s+/g, '_')}_ResourceAllocation_${new Date().toISOString().split('T')[0]}.csv`;
+link.click();
+
+
+};
+
 const categoryColors = {
 Architecture: '#a855f7', ETL: '#22c55e', Reporting: '#3b82f6',
 Database: '#f59e0b', Cloud: '#06b6d4', Analysis: '#ec4899',
@@ -518,7 +588,12 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
           <div style={sec}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
               <h3 style={{ color: '#e2e8f0', fontSize: '1rem', margin: 0 }}>👥 Resource Allocation Matrix</h3>
-              <div style={{ color: '#64748b', fontSize: '0.8rem' }}>{enabledResources.length} roles × {phases.filter(p => p.enabled).length} phases</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+               <div style={{ color: '#64748b', fontSize: '0.8rem', margin: '4px 0 0' }}>{enabledResources.length} roles × {phases.filter(p => p.enabled).length} phases</div>
+               <button onClick={exportAllocationCSV} style={{ ...btn, background: 'rgba(168,85,247,0.2)', color: '#a855f7' }}>
+                📥 Export Allocation Sheet
+               </button>
+              </div>
             </div>
             {resourceTypes.length === 0 ? (
               <p style={{ color: '#64748b', textAlign: 'center', padding: '40px' }}>No roles selected. Go back to Configuration.</p>
