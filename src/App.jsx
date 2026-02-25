@@ -1,47 +1,47 @@
-import { useState, useEffect } from ‘react’;
+import { useState, useEffect } from 'react';
 
 export default function App() {
 const defaultPhases = [
-{ id: ‘req’, name: ‘Requirements’, weeks: 2, enabled: true },
-{ id: ‘plan’, name: ‘Planning & Design’, weeks: 2, enabled: true },
-{ id: ‘dev’, name: ‘Development’, weeks: 8, enabled: true },
-{ id: ‘sit’, name: ‘SIT’, weeks: 2, enabled: true },
-{ id: ‘uat’, name: ‘UAT’, weeks: 2, enabled: true },
-{ id: ‘deploy’, name: ‘Deployment’, weeks: 1, enabled: true },
-{ id: ‘hyper’, name: ‘HyperCare’, weeks: 2, enabled: true },
-{ id: ‘training’, name: ‘Training & KT’, weeks: 1, enabled: false }
+{ id: 'req', name: 'Requirements', weeks: 2, enabled: true },
+{ id: 'plan', name: 'Planning & Design', weeks: 2, enabled: true },
+{ id: 'dev', name: 'Development', weeks: 8, enabled: true },
+{ id: 'sit', name: 'SIT', weeks: 2, enabled: true },
+{ id: 'uat', name: 'UAT', weeks: 2, enabled: true },
+{ id: 'deploy', name: 'Deployment', weeks: 1, enabled: true },
+{ id: 'hyper', name: 'HyperCare', weeks: 2, enabled: true },
+{ id: 'training', name: 'Training & KT', weeks: 1, enabled: false }
 ];
 
 const allResourceTypes = [
-{ id: ‘dw_arch’, name: ‘DW Architect’, category: ‘Architecture’ },
-{ id: ‘sol_arch’, name: ‘Solution Architect’, category: ‘Architecture’ },
-{ id: ‘data_modeler’, name: ‘Data Modeler’, category: ‘Architecture’ },
-{ id: ‘etl_lead’, name: ‘ETL Lead’, category: ‘ETL’ },
-{ id: ‘etl_dev’, name: ‘ETL Developer’, category: ‘ETL’ },
-{ id: ‘data_eng’, name: ‘Data Engineer’, category: ‘ETL’ },
-{ id: ‘cognos_lead’, name: ‘Cognos Lead’, category: ‘Reporting’ },
-{ id: ‘cognos_dev’, name: ‘Cognos Developer’, category: ‘Reporting’ },
-{ id: ‘bi_dev’, name: ‘BI Developer’, category: ‘Reporting’ },
-{ id: ‘report_dev’, name: ‘Report Developer’, category: ‘Reporting’ },
-{ id: ‘dba’, name: ‘DBA’, category: ‘Database’ },
-{ id: ‘cloud_arch’, name: ‘Cloud Architect’, category: ‘Cloud’ },
-{ id: ‘cloud_eng’, name: ‘Cloud Engineer’, category: ‘Cloud’ },
-{ id: ‘devops’, name: ‘DevOps Engineer’, category: ‘Cloud’ },
-{ id: ‘data_analyst’, name: ‘Data Analyst’, category: ‘Analysis’ },
-{ id: ‘ba’, name: ‘Business Analyst’, category: ‘Analysis’ },
-{ id: ‘test_lead’, name: ‘Test Lead’, category: ‘Testing’ },
-{ id: ‘tester’, name: ‘Tester’, category: ‘Testing’ },
-{ id: ‘perf_tester’, name: ‘Performance Tester’, category: ‘Testing’ },
-{ id: ‘qa_analyst’, name: ‘QA Analyst’, category: ‘Testing’ },
-{ id: ‘pm’, name: ‘Project Manager’, category: ‘Management’ },
-{ id: ‘scrum’, name: ‘Scrum Master’, category: ‘Management’ },
-{ id: ‘tech_writer’, name: ‘Technical Writer’, category: ‘Support’ },
-{ id: ‘security’, name: ‘Security Analyst’, category: ‘Support’ }
+{ id: 'dw_arch', name: 'DW Architect', category: 'Architecture' },
+{ id: 'sol_arch', name: 'Solution Architect', category: 'Architecture' },
+{ id: 'data_modeler', name: 'Data Modeler', category: 'Architecture' },
+{ id: 'etl_lead', name: 'ETL Lead', category: 'ETL' },
+{ id: 'etl_dev', name: 'ETL Developer', category: 'ETL' },
+{ id: 'data_eng', name: 'Data Engineer', category: 'ETL' },
+{ id: 'cognos_lead', name: 'Cognos Lead', category: 'Reporting' },
+{ id: 'cognos_dev', name: 'Cognos Developer', category: 'Reporting' },
+{ id: 'bi_dev', name: 'BI Developer', category: 'Reporting' },
+{ id: 'report_dev', name: 'Report Developer', category: 'Reporting' },
+{ id: 'dba', name: 'DBA', category: 'Database' },
+{ id: 'cloud_arch', name: 'Cloud Architect', category: 'Cloud' },
+{ id: 'cloud_eng', name: 'Cloud Engineer', category: 'Cloud' },
+{ id: 'devops', name: 'DevOps Engineer', category: 'Cloud' },
+{ id: 'data_analyst', name: 'Data Analyst', category: 'Analysis' },
+{ id: 'ba', name: 'Business Analyst', category: 'Analysis' },
+{ id: 'test_lead', name: 'Test Lead', category: 'Testing' },
+{ id: 'tester', name: 'Tester', category: 'Testing' },
+{ id: 'perf_tester', name: 'Performance Tester', category: 'Testing' },
+{ id: 'qa_analyst', name: 'QA Analyst', category: 'Testing' },
+{ id: 'pm', name: 'Project Manager', category: 'Management' },
+{ id: 'scrum', name: 'Scrum Master', category: 'Management' },
+{ id: 'tech_writer', name: 'Technical Writer', category: 'Support' },
+{ id: 'security', name: 'Security Analyst', category: 'Support' }
 ];
 
 const defaultEnabledResources = [
-‘dw_arch’, ‘etl_lead’, ‘etl_dev’, ‘cognos_dev’, ‘bi_dev’,
-‘dba’, ‘data_analyst’, ‘ba’, ‘test_lead’, ‘tester’, ‘pm’
+'dw_arch', 'etl_lead', 'etl_dev', 'cognos_dev', 'bi_dev',
+'dba', 'data_analyst', 'ba', 'test_lead', 'tester', 'pm'
 ];
 
 const getDefaultRates = () => ({
@@ -65,12 +65,12 @@ pm: 60, scrum: 45, tech_writer: 30, security: 58
 }
 });
 
-const [projectName, setProjectName] = useState(‘New DW Project’);
-const [clientName, setClientName] = useState(’’);
+const [projectName, setProjectName] = useState('New DW Project');
+const [clientName, setClientName] = useState('');
 const [phases, setPhases] = useState(defaultPhases);
 const [rates, setRates] = useState(getDefaultRates());
 const [hoursPerWeek, setHoursPerWeek] = useState(40);
-const [currency, setCurrency] = useState(‘USD’);
+const [currency, setCurrency] = useState('USD');
 const [allocations, setAllocations] = useState({});
 const [enabledResources, setEnabledResources] = useState(defaultEnabledResources);
 const [showRates, setShowRates] = useState(false);
@@ -79,9 +79,9 @@ const [estimate, setEstimate] = useState(null);
 const [savedProjects, setSavedProjects] = useState([]);
 const [showSaveModal, setShowSaveModal] = useState(false);
 const [showLoadModal, setShowLoadModal] = useState(false);
-const [activeTab, setActiveTab] = useState(‘config’);
+const [activeTab, setActiveTab] = useState('config');
 
-const currencySymbols = { USD: ‘$’, EUR: ‘€’, GBP: ‘£’, INR: ‘₹’, AUD: ‘A$’, CAD: ‘C$’ };
+const currencySymbols = { USD: '$', EUR: '€', GBP: '£', INR: '₹', AUD: 'A$', CAD: 'C$' };
 
 const resourceTypes = allResourceTypes.filter(r => enabledResources.includes(r.id));
 
@@ -98,7 +98,7 @@ return acc;
 }, {});
 
 useEffect(() => {
-const saved = localStorage.getItem(‘dw_estimator_projects’);
+const saved = localStorage.getItem('dw_estimator_projects');
 if (saved) setSavedProjects(JSON.parse(saved));
 }, []);
 
@@ -116,7 +116,7 @@ else setEnabledResources(prev => prev.filter(id => !ids.includes(id)));
 
 const updatePhase = (id, field, value) => {
 setPhases(phases.map(p =>
-p.id === id ? { …p, [field]: field === ‘weeks’ ? Number(value) : value } : p
+p.id === id ? { …p, [field]: field === 'weeks' ? Number(value) : value } : p
 ));
 };
 
@@ -217,18 +217,18 @@ data: { projectName, clientName, phases, rates, hoursPerWeek, currency, allocati
 };
 const updated = […savedProjects.filter(p => p.name !== projectName), project];
 setSavedProjects(updated);
-localStorage.setItem(‘dw_estimator_projects’, JSON.stringify(updated));
+localStorage.setItem('dw_estimator_projects', JSON.stringify(updated));
 setShowSaveModal(false);
 };
 
 const loadProject = (project) => {
 const { data } = project;
 setProjectName(data.projectName);
-setClientName(data.clientName || ‘’);
+setClientName(data.clientName || '');
 setPhases(data.phases);
 setRates(data.rates);
 setHoursPerWeek(data.hoursPerWeek);
-setCurrency(data.currency || ‘USD’);
+setCurrency(data.currency || 'USD');
 setAllocations(data.allocations);
 setEnabledResources(data.enabledResources || defaultEnabledResources);
 setShowLoadModal(false);
@@ -238,26 +238,26 @@ setEstimate(null);
 const deleteProject = (id) => {
 const updated = savedProjects.filter(p => p.id !== id);
 setSavedProjects(updated);
-localStorage.setItem(‘dw_estimator_projects’, JSON.stringify(updated));
+localStorage.setItem('dw_estimator_projects', JSON.stringify(updated));
 };
 
 const exportToCSV = () => {
 if (!estimate) return;
 const sym = currencySymbols[currency];
 let csv = [
-[‘Data Warehouse Project Estimate’],
-[‘Project Name’, estimate.projectName],
-…(estimate.clientName ? [[‘Client’, estimate.clientName]] : []),
-[‘Generated’, new Date(estimate.generatedAt).toLocaleString()],
+['Data Warehouse Project Estimate'],
+['Project Name', estimate.projectName],
+…(estimate.clientName ? [['Client', estimate.clientName]] : []),
+['Generated', new Date(estimate.generatedAt).toLocaleString()],
 [],
-[‘SUMMARY’],
-[‘Total Duration (weeks)’, estimate.totalWeeks],
-[‘Total Cost’, `${sym}${estimate.totalCost.toLocaleString()}`],
-[‘Onsite Cost’, `${sym}${estimate.totalOnsiteCost.toLocaleString()}`, `${estimate.onsitePercent}%`],
-[‘Offshore Cost’, `${sym}${estimate.totalOffshoreCost.toLocaleString()}`, `${estimate.offshorePercent}%`],
+['SUMMARY'],
+['Total Duration (weeks)', estimate.totalWeeks],
+['Total Cost', `${sym}${estimate.totalCost.toLocaleString()}`],
+['Onsite Cost', `${sym}${estimate.totalOnsiteCost.toLocaleString()}`, `${estimate.onsitePercent}%`],
+['Offshore Cost', `${sym}${estimate.totalOffshoreCost.toLocaleString()}`, `${estimate.offshorePercent}%`],
 [],
-[‘PHASE BREAKDOWN’],
-[‘Phase’, ‘Weeks’, ‘Onsite Cost’, ‘Offshore Cost’, ‘Total Cost’],
+['PHASE BREAKDOWN'],
+['Phase', 'Weeks', 'Onsite Cost', 'Offshore Cost', 'Total Cost'],
 …estimate.phaseBreakdown.map(p => [
 p.name, p.weeks,
 `${sym}${p.onsiteCost.toLocaleString()}`,
@@ -265,8 +265,8 @@ p.name, p.weeks,
 `${sym}${p.cost.toLocaleString()}`
 ]),
 [],
-[‘RESOURCE BREAKDOWN’],
-[‘Resource’, ‘Category’, ‘Onsite Hours’, ‘Offshore Hours’, ‘Onsite Cost’, ‘Offshore Cost’, ‘Total Cost’],
+['RESOURCE BREAKDOWN'],
+['Resource', 'Category', 'Onsite Hours', 'Offshore Hours', 'Onsite Cost', 'Offshore Cost', 'Total Cost'],
 …estimate.resourceSummary.map(r => [
 r.name, r.category, r.onsiteHours, r.offshoreHours,
 `${sym}${r.onsiteCost.toLocaleString()}`,
@@ -274,48 +274,48 @@ r.name, r.category, r.onsiteHours, r.offshoreHours,
 `${sym}${(r.onsiteCost + r.offshoreCost).toLocaleString()}`
 ])
 ];
-const csvContent = csv.map(row => row.map(c => `"${c}"`).join(’,’)).join(’\n’);
-const blob = new Blob([csvContent], { type: ‘text/csv;charset=utf-8;’ });
-const link = document.createElement(‘a’);
+const csvContent = csv.map(row => row.map(c => `"${c}"`).join(',')).join('\n');
+const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+const link = document.createElement('a');
 link.href = URL.createObjectURL(blob);
 link.download = `${projectName.replace(/\s+/g, '_')}_Estimate_${new Date().toISOString().split('T')[0]}.csv`;
 link.click();
 };
 
 const categoryColors = {
-Architecture: ‘#a855f7’, ETL: ‘#22c55e’, Reporting: ‘#3b82f6’,
-Database: ‘#f59e0b’, Cloud: ‘#06b6d4’, Analysis: ‘#ec4899’,
-Testing: ‘#ef4444’, Management: ‘#8b5cf6’, Support: ‘#64748b’
+Architecture: '#a855f7', ETL: '#22c55e', Reporting: '#3b82f6',
+Database: '#f59e0b', Cloud: '#06b6d4', Analysis: '#ec4899',
+Testing: '#ef4444', Management: '#8b5cf6', Support: '#64748b'
 };
 
 const inp = {
-padding: ‘8px 10px’, borderRadius: ‘6px’,
-border: ‘1px solid rgba(255,255,255,0.2)’,
-background: ‘rgba(255,255,255,0.05)’, color: ‘#fff’, fontSize: ‘0.9rem’
+padding: '8px 10px', borderRadius: '6px',
+border: '1px solid rgba(255,255,255,0.2)',
+background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: '0.9rem'
 };
 const sec = {
-background: ‘rgba(255,255,255,0.03)’, borderRadius: ‘12px’,
-padding: ‘20px’, marginBottom: ‘20px’,
-border: ‘1px solid rgba(255,255,255,0.08)’
+background: 'rgba(255,255,255,0.03)', borderRadius: '12px',
+padding: '20px', marginBottom: '20px',
+border: '1px solid rgba(255,255,255,0.08)'
 };
 const btn = {
-padding: ‘10px 16px’, borderRadius: ‘6px’, border: ‘none’,
-cursor: ‘pointer’, fontSize: ‘0.9rem’, fontWeight: ‘500’, transition: ‘all 0.2s’
+padding: '10px 16px', borderRadius: '6px', border: 'none',
+cursor: 'pointer', fontSize: '0.9rem', fontWeight: '500', transition: 'all 0.2s'
 };
 const tab = (active) => ({
-padding: ‘12px 24px’, borderRadius: ‘8px 8px 0 0’, border: ‘none’,
-background: active ? ‘rgba(59,130,246,0.2)’ : ‘transparent’,
-color: active ? ‘#3b82f6’ : ‘#94a3b8’, cursor: ‘pointer’,
-fontSize: ‘0.95rem’, fontWeight: ‘500’,
-borderBottom: active ? ‘2px solid #3b82f6’ : ‘2px solid transparent’
+padding: '12px 24px', borderRadius: '8px 8px 0 0', border: 'none',
+background: active ? 'rgba(59,130,246,0.2)' : 'transparent',
+color: active ? '#3b82f6' : '#94a3b8', cursor: 'pointer',
+fontSize: '0.95rem', fontWeight: '500',
+borderBottom: active ? '2px solid #3b82f6' : '2px solid transparent'
 });
 
 return (
 <div style={{
-minHeight: ‘100vh’,
-background: ‘linear-gradient(135deg, #0f172a 0%, #1e293b 100%)’,
-padding: ‘30px 20px’,
-fontFamily: ‘-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-serif’
+minHeight: '100vh',
+background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+padding: '30px 20px',
+fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-serif'
 }}>
 <style>{`@media print { body * { visibility: hidden; } .print-area, .print-area * { visibility: visible; } .print-area { position: absolute; left: 0; top: 0; width: 100%; } .no-print { display: none !important; } }`}</style>
 
