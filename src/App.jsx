@@ -69,7 +69,8 @@ const [projectName, setProjectName] = useState('New DW Project');
 const [clientName, setClientName] = useState('');
 const [phases, setPhases] = useState(defaultPhases);
 const [rates, setRates] = useState(getDefaultRates());
-const [hoursPerWeek, setHoursPerWeek] = useState(40);
+const [onsiteHoursPerWeek, setOnsiteHoursPerWeek] = useState(40);
+const [offshoreHoursPerWeek, setOffshoreHoursPerWeek] = useState(45);
 const [currency, setCurrency] = useState('USD');
 const [allocations, setAllocations] = useState({});
 const [enabledResources, setEnabledResources] = useState(defaultEnabledResources);
@@ -154,8 +155,8 @@ enabledPhases.forEach(phase => {
   resourceTypes.forEach(resource => {
     const alloc = allocations[phase.id]?.[resource.id] || { onsite: 0, offshore: 0 };
     if (alloc.onsite > 0 || alloc.offshore > 0) {
-      const onsiteHours = alloc.onsite * phaseHours;
-      const offshoreHours = alloc.offshore * phaseHours;
+      const onsiteHours = alloc.onsite * phase.weeks * onsiteHoursPerWeek;
+      const offshoreHours = alloc.offshore * phase.weeks * offshoreHoursPerWeek;
       const onsiteCost = onsiteHours * rates.onsite[resource.id];
       const offshoreCost = offshoreHours * rates.offshore[resource.id];
 
@@ -361,9 +362,17 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
                   <input type="text" value={val} onChange={e => set(e.target.value)} placeholder={ph} style={{ ...inp, width: '100%' }} />
                 </div>
               ))}
+             <div>
+                <label style={{ color: '#94a3b8', fontSize: '0.85rem', display: 'block', marginBottom: '6px' }}>
+                  🟢 Onsite Hrs/Week
+                </label>
+                <input type="number" value={onsiteHoursPerWeek} onChange={e => setOnsiteHoursPerWeek(Number(e.target.value))} style={{ ...inp, width: '100%' }} />
+              </div>
               <div>
-                <label style={{ color: '#94a3b8', fontSize: '0.85rem', display: 'block', marginBottom: '6px' }}>Hours/Week</label>
-                <input type="number" value={hoursPerWeek} onChange={e => setHoursPerWeek(Number(e.target.value))} style={{ ...inp, width: '100%' }} />
+                <label style={{ color: '#94a3b8', fontSize: '0.85rem', display: 'block', marginBottom: '6px' }}>
+                  🔵 Offshore Hrs/Week
+                </label>
+                <input type="number" value={offshoreHoursPerWeek} onChange={e => setOffshoreHoursPerWeek(Number(e.target.value))} style={{ ...inp, width: '100%' }} />
               </div>
               <div>
                 <label style={{ color: '#94a3b8', fontSize: '0.85rem', display: 'block', marginBottom: '6px' }}>Currency</label>
@@ -548,10 +557,10 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
                             <td style={{ color: '#cbd5e1', padding: '6px 8px', fontSize: '0.85rem', position: 'sticky', left: 0, background: '#1a2536', zIndex: 1 }}>{resource.name}</td>
                             {phases.filter(p => p.enabled).flatMap(phase => [
                               <td key={`${phase.id}-${resource.id}-on`} style={{ padding: '4px', textAlign: 'center' }}>
-                                <input type="number" min="0" step="0.5" value={allocations[phase.id]?.[resource.id]?.onsite || ''} onChange={e => updateAllocation(phase.id, resource.id, 'onsite', e.target.value)} placeholder="0" style={{ ...inp, width: '50px', padding: '6px', textAlign: 'center' }} />
+                                <input type="number" min="0" step="0.1" value={allocations[phase.id]?.[resource.id]?.onsite || ''} onChange={e => updateAllocation(phase.id, resource.id, 'onsite', e.target.value)} placeholder="0" style={{ ...inp, width: '50px', padding: '6px', textAlign: 'center' }} />
                               </td>,
                               <td key={`${phase.id}-${resource.id}-off`} style={{ padding: '4px', textAlign: 'center' }}>
-                                <input type="number" min="0" step="0.5" value={allocations[phase.id]?.[resource.id]?.offshore || ''} onChange={e => updateAllocation(phase.id, resource.id, 'offshore', e.target.value)} placeholder="0" style={{ ...inp, width: '50px', padding: '6px', textAlign: 'center' }} />
+                                <input type="number" min="0" step="0.1" value={allocations[phase.id]?.[resource.id]?.offshore || ''} onChange={e => updateAllocation(phase.id, resource.id, 'offshore', e.target.value)} placeholder="0" style={{ ...inp, width: '50px', padding: '6px', textAlign: 'center' }} />
                               </td>
                             ])}
                           </tr>
