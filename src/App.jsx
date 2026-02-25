@@ -710,7 +710,5 @@ fontFamily: '-apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, sans-ser
     </div>
   )}
 </div>
-```
-
 );
 }
